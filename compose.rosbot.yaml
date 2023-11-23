@@ -18,9 +18,19 @@ services:
     build: .
     network_mode: host
     ipc: host
-    # volumes:
-    #   - ./
-    # command: sleep 3600
+
+  # docker compose -f compose.rosbot.yaml run follower bash
+  # source /ros_entrypoint.sh
+  # ros2 run follow_apriltag follow_apriltag
+  # follower:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test
+  #   network_mode: host
+  #   ipc: host
+  #   volumes:
+  #     - ./follow_apriltag:/ros2_ws/src/follow_apriltag
+
 
   apriltag:
     image: husarion/apriltag:humble-3.1.2-20231121
