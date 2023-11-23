@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
         python3-pip \
         python3-rosdep \
         python3-vcstool \
-        ros-$ROS_DISTRO-tf-transformations && \
+        ros-$ROS_DISTRO-tf-transformations \
+        ros-${ROS_DISTRO}-apriltag-ros # for messages definitions && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install transforms3d
@@ -18,7 +19,7 @@ WORKDIR /ros2_ws
 RUN mkdir -p /ros2_ws/src
 
 # Copy your Python script to the workspace
-COPY follow_apriltag /ros2_ws/src/
+COPY follow_apriltag /ros2_ws/src/follow_apriltag
 
 # Install dependencies
 RUN rosdep update && rosdep install --from-paths src --ignore-src -r -y
