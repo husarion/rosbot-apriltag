@@ -1,6 +1,8 @@
 # Use an official ROS 2 base image
 FROM husarnet/ros:humble-ros-base
 
+SHELL ["/bin/bash", "-c"]
+
 # Install pip and other dependencies
 RUN apt-get update && apt-get install -y \
         python3-pip \
@@ -22,11 +24,9 @@ COPY follow_apriltag /ros2_ws/src/
 RUN rosdep update && rosdep install --from-paths src --ignore-src -r -y
 
 # Build the workspace
-RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /ros2_ws; colcon build'
-
-# Source the workspace
-SHELL ["/bin/bash", "-c"]
-RUN echo "source /ros2_ws/install/setup.bash" >> ~/.bashrc
+RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+    cd /ros2_ws && \
+    colcon build
 
 # Run the node
-CMD ["ros2", "run", "follow_apriltag", "follow_apriltag.py"]
+CMD ["ros2", "run", "follow_apriltag", "follow_apriltag"]
