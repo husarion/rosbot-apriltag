@@ -17,7 +17,9 @@ services:
   follower:
     build: .
     network_mode: host
-    ipc: host 
+    ipc: host
+    # volumes:
+    #   - ./
     # command: sleep 3600
 
   apriltag:

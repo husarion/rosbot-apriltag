@@ -1,4 +1,5 @@
 import rclpy
+import math
 from rclpy.node import Node
 from tf2_ros import TransformListener, Buffer
 from geometry_msgs.msg import Twist
@@ -40,8 +41,9 @@ class FollowAprilTagNode(Node):
 
         # Calculate distance and angle to the AprilTag
         distance = (translation.x ** 2 + translation.y ** 2) ** 0.5
-        euler_angles = euler_from_quaternion([rotation.x, rotation.y, rotation.z, rotation.w])
-        angle = euler_angles[2]
+        # euler_angles = euler_from_quaternion([rotation.x, rotation.y, rotation.z, rotation.w])
+        # angle = euler_angles[2]
+        angle = math.atan2(translation.y, translation.x)
 
         # Log calculated distance and angle
         self.get_logger().info(f"Distance to AprilTag: {distance} meters")
@@ -53,7 +55,7 @@ class FollowAprilTagNode(Node):
 
         if distance > 0.5:  # If more than 50cm away
             linear_velocity = min(0.5 * (distance - 0.5), 1.0)  # Speed capped at 1 m/s
-            angular_velocity = -3.0 * angle  # Adjust angular velocity based on angle
+            angular_velocity = 3.0 * angle  # Adjust angular velocity based on angle
 
         # Log the velocities being set
         self.get_logger().info(f"Setting linear velocity: {linear_velocity} m/s, angular velocity: {angular_velocity} rad/s")
