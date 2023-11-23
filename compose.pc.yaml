@@ -1,0 +1,16 @@
+# Quickstart:
+# xhost +local:docker && \
+# docker compose -f compose.pc.yaml up
+
+services:
+
+  rviz:
+    image: husarion/rviz2:humble-nightly
+    network_mode: host
+    ipc: host
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./default.astra.rviz:/root/.rviz2/default.rviz
+    environment:
+      - DISPLAY
+      - LIBGL_ALWAYS_SOFTWARE=1 

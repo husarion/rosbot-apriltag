@@ -1,0 +1,23 @@
+camera_name : "camera"
+color_width: 320
+color_height: 240
+color_fps: 15
+enable_color: true
+
+# IR camera width/height/FPS
+ir_width: 640
+ir_height: 480
+ir_fps: 30
+enable_ir: false
+
+# depth camera width/height/FPS
+depth_width: 640
+depth_height: 480
+depth_fps: 30
+enable_depth: false
+
+# open depth to color alignment （hardware alignment）
+depth_align: false
+serial_number: ""
+number_of_devices: 1
+

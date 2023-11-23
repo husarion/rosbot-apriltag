@@ -1,0 +1,48 @@
+services:
+
+  rosbot:
+    image: husarion/rosbot:humble-add_healthcheck
+    network_mode: host
+    ipc: host
+    command: ros2 launch rosbot_bringup bringup.launch.py mecanum:=${MECANUM:-True}
+
+  microros:
+    image: husarion/micro-ros-agent:humble-nightly
+    network_mode: host
+    ipc: host
+    devices:
+      - ${SERIAL_PORT:?err}
+    command: ros2 run micro_ros_agent micro_ros_agent serial -D $SERIAL_PORT serial -b 576000 # -v6
+
+  follower:
+    build: .
+    network_mode: host
+    ipc: host 
+    command: sleep 3600
+
+  apriltag:
+    image: husarion/apriltag:humble-3.1.2-20231121
+    network_mode: host
+    ipc: host
+    volumes:
+      - ./apriltag.yaml:/apriltag.yaml
+    command: >
+      ros2 run apriltag_ros apriltag_node 
+        --ros-args 
+        -r image_rect:=/camera/color/image_raw 
+        -r camera_info:=/camera/color/camera_info 
+        --params-file /apriltag.yaml
+
+  astra:
+    image: husarion/astra:humble-1.0.2-20231121
+    network_mode: host
+    ipc: host
+    devices:
+      - /dev/bus/usb/
+    volumes:
+      - ./astra_params.yaml:/ros2_ws/install/astra_camera/share/astra_camera/params/astra_mini_params.yaml
+    command: ros2 launch astra_camera astra_mini.launch.py
+
+
+
+
