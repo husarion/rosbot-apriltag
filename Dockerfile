@@ -29,5 +29,8 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     cd /ros2_ws && \
     colcon build --symlink-install
 
+# Environment variable for AprilTag frame
+ENV APRIL_TAG_FRAME="tag36h11:0"
+
 # Run the node
 CMD ["ros2", "run", "follow_apriltag", "follow_apriltag"]

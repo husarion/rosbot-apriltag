@@ -1,3 +1,4 @@
+import os
 import rclpy
 import math
 from rclpy.node import Node
@@ -40,6 +41,11 @@ class FollowAprilTagNode(Node):
     def __init__(self):
         super().__init__('follow_april_tag_node')
 
+        # Get AprilTag frame from environment variable
+        self.april_tag_frame = os.getenv(
+            'APRIL_TAG_FRAME', 'tag36h11:0').replace('"', '')
+        self.get_logger().info(f'APRIL_TAG_FRAME: {self.april_tag_frame}')
+
         # Subscribe to the detections topic
         self.detection_subscriber = self.create_subscription(
             AprilTagDetectionArray,
@@ -64,7 +70,7 @@ class FollowAprilTagNode(Node):
         # self.pid_angle = PIDController(
         #     kp=0.5, ki=0.02, kd=0.01, min_output=-1.0, max_output=1.0, integral_max=0.5, integral_min=-0.5)
         self.pid_angle = PIDController(
-            kp=1.5, ki=0.05, kd=0.05, min_output=-1.0, max_output=1.0, integral_max=0.5, integral_min=-0.5)
+            kp=2.5, ki=0.2, kd=0.05, min_output=-2.0, max_output=2.0, integral_max=0.5, integral_min=-0.5)
 
         # Last time for PID calculation
         self.last_time = self.get_clock().now()
@@ -77,7 +83,7 @@ class FollowAprilTagNode(Node):
         try:
             # Get the transform from the robot to the AprilTag
             trans = self.tf_buffer.lookup_transform(
-                'camera_link', 'tag36h11:4', rclpy.time.Time())
+                'camera_link', self.april_tag_frame, rclpy.time.Time())
 
             # Process the transform and send commands to the robot
             self.process_transform_and_move_robot(trans)

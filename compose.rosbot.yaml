@@ -14,17 +14,22 @@ services:
       - ${SERIAL_PORT:?err}
     command: ros2 run micro_ros_agent micro_ros_agent serial -D $SERIAL_PORT serial -b 576000 # -v6
 
+  # docker compose -f compose.rosbot.yaml run follower bash
+  # source /ros_entrypoint.sh
+  # ros2 run follow_apriltag follow_apriltag
   follower:
     build: .
     network_mode: host
     ipc: host
+    environment:
+      - APRIL_TAG_FRAME="tag36h11:4"
+    # dev setup:
+    # docker compose -f compose.rosbot.yaml run follower bash
+    # source /ros_entrypoint.sh
+    # ros2 run follow_apriltag follow_apriltag
     volumes:
       - ./follow_apriltag:/ros2_ws/src/follow_apriltag
     command: tail -f /dev/null
-
-  # docker compose -f compose.rosbot.yaml run follower bash
-  # source /ros_entrypoint.sh
-  # ros2 run follow_apriltag follow_apriltag
 
   apriltag:
     image: husarion/apriltag:humble-3.1.2-20231121

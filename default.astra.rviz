@@ -89,6 +89,8 @@ Visualization Manager:
           Value: false
         cover_link:
           Value: false
+        depth:
+          Value: false
         fl_range:
           Value: false
         fl_wheel_link:
@@ -102,6 +104,8 @@ Visualization Manager:
         laser:
           Value: false
         odom:
+          Value: false
+        orbbec_astra_link:
           Value: false
         rl_range:
           Value: false
@@ -155,6 +159,9 @@ Visualization Manager:
               {}
           camera_orbbec_astra_link:
             {}
+          orbbec_astra_link:
+            depth:
+              {}
         odom:
           {}
       Update Interval: 0
